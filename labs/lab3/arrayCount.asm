@@ -1,7 +1,7 @@
 # arrayCount.asm
   .data 
-arrayA: .word 1, 0, 2, 0, 3, 1, 2, 3   # arrayA has 5 values
-count:  .word 999             # dummy value
+arrayA: .word 1, 2, 3, 4, 5, 6, 7, 8   # arrayA has 5 values
+count:  .word 0             # dummy value
 
   .text
 main:
@@ -13,12 +13,39 @@ main:
     la $t0, arrayA
 
     la $t8, count
+    lw $s0, 0($t8)
 
-    # code for reading in the user value X
+    addi $t1, $t0, 0
+    addi $t2, $t0, 32
+
+    # code for reading in the user input x
+    li   $v0, 5
+    syscall
+    addi $t3, $v0, 0
 
     # code for counting multiples of X in arrayA
+    addi $t1, $t0, 0
+
+    addi $t4, $t3, -1
+
+    looptwo: beq  $t1, $t2, endtwo
+         
+         lw $t5, 0($t1)
+         and $t6, $t5, $t4
+         bne $t6, $zero, skip
+         addi $s0, $s0, 1
+
+    skip:    addi $t1, $t1, 4
+            j looptwo
+    endtwo:
 
     # code for printing result
+    li   $v0, 1    # system call code for print_int
+    add $a0, $s0, $zero
+    syscall        # print the integer
+
+    # store data
+    sw $s0, 0($t8)
 
     # code for terminating program
     li  $v0, 10

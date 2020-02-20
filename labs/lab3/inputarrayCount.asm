@@ -54,6 +54,9 @@ endtwo:
     add $a0, $s0, $zero
     syscall        # print the integer
 
+    # store data
+    sw $s0, 0($t8)
+
     # code for terminating program
     li  $v0, 10
     syscall
